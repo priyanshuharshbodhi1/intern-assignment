@@ -3,18 +3,17 @@ import { Link } from "react-router-dom";
 import "./App.css";
 
 const App = () => {
+
+  //states
   const [total, setTotal] = useState(0);
-
   const [type, setType] = useState(0);
-
   const [level, setLevel] = useState(0);
-
   const [words, setWords] = useState(0);
-
   const [quantity, setQuantity] = useState(1);
 
+  //To update total when any of it type, level or quantity changes
   useEffect(() => {
-    // Function to calculate total based on type and level multipliers
+    // Function to calculate total based on type and level multipliers (and quantity applied)
     const calculateTotal = () => {
       const typeMultiplier = getTypeMultiplier();
       const levelMultiplier = getLevelMultiplier();
@@ -38,52 +37,34 @@ const App = () => {
 
     // Function to get level multiplier
     const getLevelMultiplier = () => {
-      return level + 1; // Adjust as needed based on your requirements
+      return level + 1;
     };
 
     // Update total when type, level, or quantity changes
     setTotal(calculateTotal());
+
   }, [type, level, quantity]);
 
+  //function for handelling quantity changing event
   const handleQuantityChange = (event) => {
     // Ensure the entered value is a number
     const value = parseInt(event.target.value, 10);
 
     // Check if the value is within the desired range
     if (!isNaN(value) && value >= 1 && value <= 100) {
-      // if(words===1){
-      //   const newValue = value*225;
-      //   setQuantity(newValue)
-      // }
-      // else{
         setQuantity(value);
-      // }
-      
     }
   };
-
-  useEffect (()=>{
-    
-    // if (!isNaN(quantity) && quantity >= 1 && quantity<= 10000) {
-    //   if(words===1){
-    //     const newValue = quantity*225;
-    //     setQuantity(newValue)
-    //   }
-    //   else{
-    //     setQuantity(quantity);
-    //   }
-      
-    // }
-  },[quantity,words])
 
   return (
     <div className="main-container">
       <div className="calculator-container">
         <div className="inner-container">
+          {/* Type selection section */}
           <div className="type">
             <div
-              className={`selector-btn ${type === 0 ? "selected-type" : ""} `}
-              onClick={() => setType(0)}
+              className={`selector-btn ${type === 0 ? "selected-type" : ""} `} // Sets a class of 'selected type' when clicking on it.
+              onClick={() => setType(0)} // Set index to state.
             >
               Academic writing
             </div>
@@ -100,6 +81,8 @@ const App = () => {
               Calculations
             </div>
           </div>
+
+          {/* Educational level selection section */}
           <div className="educational-level">
             <div
               className={`selector-btn ${level === 0 ? "selected-type" : ""} `}
@@ -126,6 +109,8 @@ const App = () => {
               Professional
             </div>
           </div>
+
+          {/* Paper type selection section */}
           <div className="paper-type">
             <label htmlFor="paper-type">Type of paper</label>
             <br />
@@ -145,8 +130,11 @@ const App = () => {
               <option value="Thesis Statement">Thesis Statement</option>
             </select>
           </div>
+
+          {/* Quantity and deadline input section */}
           <div className="inner-container-2">
             <div className="qty-and-deadline">
+              {/* Quantity input */}
               <div className="quantity">
                 <label htmlFor="quantity">
                   Quantity
@@ -154,16 +142,18 @@ const App = () => {
                 <br />
                 <input
                   type="number"
-                  value={words === 1 ? quantity * 225 : quantity}
+                  value={words === 1 ? quantity * 225 : quantity} //Qunatity as per selected - words or pages.
                   onChange={handleQuantityChange}
                   defaultValue="1"
                   id="quantity"
                   name="quantity"
-                  min="1" // You can set a minimum value if needed
+                  min="1"
                   max="100"
                   className="quantity-input"
                   disabled={words === 1} 
                 />
+
+                {/* Page/word configuration */}
                 <div className="page-config">
                   <div
                     className={`selector-btn ${
@@ -183,6 +173,8 @@ const App = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Deadline input */}
               <div className="deadline">
                 <label htmlFor="deadline">Deadline</label>
                 <br />
@@ -195,11 +187,17 @@ const App = () => {
               </div>
             </div>
           </div>
+
+          {/* Price and order button section */}
           <div className="inner-container-3">
+
+            {/* Total Price */}
             <div className="price">
               <div className="approx-price">Approx. Price</div>
               <div className="total-price">${total}</div>
             </div>
+
+            {/* Order button */}
             <Link
               to="/thank-you"
               className="order-btn"
